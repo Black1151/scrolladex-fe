@@ -7,19 +7,17 @@ interface Employee {
   lastName: string;
   empNo: string;
   jobTitle: string;
-  departmentId: number;
+  departmentId: string;
   telephone: string;
   email: string;
   profilePicture: string;
-  created_at?: string;
-  updated_at?: string;
 }
 
 const api = axios.create({
   baseURL: 'http://localhost:3333', 
 });
 
-export const getEmployees = async (): Promise<Employee[] | null> => {
+export const getEmployeesAPI = async (): Promise<Employee[] | null> => {
   try {
     const response: AxiosResponse<Employee[]> = await api.get('/employees');
     return response.data;
@@ -29,7 +27,7 @@ export const getEmployees = async (): Promise<Employee[] | null> => {
   }
 };
 
-export const getEmployee = async (id: number): Promise<Employee | null> => {
+export const getEmployeeAPI = async (id: number): Promise<Employee | null> => {
   try {
     const response: AxiosResponse<Employee> = await api.get(`/employees/${id}`);
     return response.data;
@@ -39,7 +37,7 @@ export const getEmployee = async (id: number): Promise<Employee | null> => {
   }
 };
 
-export const createEmployee = async (data: Employee): Promise<Employee | null> => {
+export const createEmployeeAPI = async (data: Employee): Promise<Employee | null> => {
   try {
     const response: AxiosResponse<Employee> = await api.post('/employees', data);
     return response.data;
@@ -49,7 +47,7 @@ export const createEmployee = async (data: Employee): Promise<Employee | null> =
   }
 };
 
-export const updateEmployee = async (id: number, data: Employee): Promise<Employee | null> => {
+export const updateEmployeeAPI = async (id: number, data: Employee): Promise<Employee | null> => {
   try {
     const response: AxiosResponse<Employee> = await api.put(`/employees/${id}`, data);
     return response.data;
@@ -59,7 +57,7 @@ export const updateEmployee = async (id: number, data: Employee): Promise<Employ
   }
 };
 
-export const deleteEmployee = async (id: number): Promise<Employee | null> => {
+export const deleteEmployeeAPI = async (id: number): Promise<Employee | null> => {
   try {
     const response: AxiosResponse<Employee> = await api.delete(`/employees/${id}`);
     return response.data;
