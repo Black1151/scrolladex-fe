@@ -3,7 +3,6 @@ import {
   Box,
   Flex,
   Text,
-  Link,
   Spacer,
   useTheme,
   IconButton,
