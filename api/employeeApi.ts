@@ -44,7 +44,7 @@ export const createEmployee = async (data: Employee): Promise<Employee | null> =
     const response: AxiosResponse<Employee> = await api.post('/employees', data);
     return response.data;
   } catch (error) {
-    console.error('Error creating employee', err)or;
+    console.error('Error creating employee', error);
     return null;
   }
 };
