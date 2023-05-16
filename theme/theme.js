@@ -10,10 +10,25 @@ const theme = extendTheme({
     "2xl": "1440px",
   },
   colors,
+  fonts: {
+    heading: "Roboto",
+    body: "Roboto",
+  },
+  fontWeights: {
+    thin: 100,
+    normal: 300,
+    medium: 400,
+    bold: 700,
+  },
   components: {
+    Text: {
+      baseStyle: {
+        fontWeight: "normal",
+      },
+    },
     Button: {
       baseStyle: {
-        fontWeight: "bold",
+        fontWeight: "medium",
         borderWidth: "1px",
       },
       variants: {
