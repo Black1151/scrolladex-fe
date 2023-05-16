@@ -44,8 +44,8 @@ const Navbar = () => {
       </VStack>
       <Spacer />
       <HStack display={{ base: "none", md: "flex" }}>
-        <Button>Add employee</Button>
-        <Button>Add department</Button>
+        <Button variant="green">Add employee</Button>
+        <Button variant="green">Add department</Button>
       </HStack>
       <Box display={{ base: "block", md: "none" }}>
         <IconButton
