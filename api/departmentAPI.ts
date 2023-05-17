@@ -2,7 +2,12 @@ import axios, { AxiosResponse } from 'axios';
 
 interface Department {
   id?: number;
-  name: string;
+  departmentName: string;
+  addressLineOne: string;
+  addressLineTwo?: string;
+  town: string;
+  county: string;
+  postcode: string;
 }
 
 const api = axios.create({
