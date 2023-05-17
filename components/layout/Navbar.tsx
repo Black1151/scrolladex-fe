@@ -18,7 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 
-import CreateEmployeeModal from "../modals/CreateEmployeeModal";
+import AddEmployeeModal from "../modals/AddEmployeeModal";
 
 const Navbar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -43,7 +43,7 @@ const Navbar = () => {
       </VStack>
       <Spacer />
       <HStack display={{ base: "none", md: "flex" }}>
-        <CreateEmployeeModal />
+        <AddEmployeeModal />
         <Button variant="green">Add department</Button>
       </HStack>
       <Box display={{ base: "block", md: "none" }}>
@@ -58,7 +58,7 @@ const Navbar = () => {
             <DrawerCloseButton />
             <DrawerHeader>Menu</DrawerHeader>
             <DrawerBody>
-              <CreateEmployeeModal />
+              <AddEmployeeModal />
               <Button>Add department</Button>
             </DrawerBody>
           </DrawerContent>
