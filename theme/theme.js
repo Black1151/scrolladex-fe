@@ -41,6 +41,24 @@ const theme = extendTheme({
             backgroundColor: "white",
           },
         },
+        blue: {
+          color: "white",
+          borderColor: "pictonBlue",
+          backgroundColor: "pictonBlue",
+          _hover: {
+            color: "pictonBlue",
+            backgroundColor: "white",
+          },
+        },
+        orange: {
+          color: "white",
+          borderColor: "bittersweet",
+          backgroundColor: "bittersweet",
+          _hover: {
+            color: "bittersweet",
+            backgroundColor: "white",
+          },
+        },
       },
     },
   },
