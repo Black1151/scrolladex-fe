@@ -129,7 +129,7 @@ const AddEmployeeModal: React.FC = () => {
             </Button>
           </Flex>
           <ModalBody>
-            <Box p={4} gap={10} mx="auto">
+            <Box p={4}>
               <form onSubmit={formik.handleSubmit}>
                 <Flex gap={4} flexDirection="column">
                   <Flex flexDirection={["column", null, "row"]} gap={4}>
