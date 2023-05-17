@@ -7,7 +7,6 @@ import {
   Input,
   FormErrorMessage,
   Button,
-  Box,
   useDisclosure,
   Modal,
   ModalOverlay,
@@ -129,29 +128,29 @@ const AddDepartmentModal: React.FC = () => {
             </Button>
           </Flex>
           <ModalBody>
-            <Box p={4} gap={10} mx="auto">
-              <form onSubmit={formik.handleSubmit}>
-                <Flex gap={4} flexDirection="column">
-                  <FormControl
-                    isInvalid={
-                      formik.touched.departmentName &&
-                      !!formik.errors.departmentName
-                    }
-                  >
-                    <FormLabel htmlFor="departmentName">
-                      Department Name
-                    </FormLabel>
-                    <Input
-                      id="departmentName"
-                      name="departmentName"
-                      onChange={formik.handleChange}
-                      value={formik.values.departmentName}
-                    />
-                    <FormErrorMessage>
-                      {formik.errors.departmentName}
-                    </FormErrorMessage>
-                  </FormControl>
+            <form onSubmit={formik.handleSubmit}>
+              <Flex p={4} gap={4} flexDirection="column">
+                <FormControl
+                  isInvalid={
+                    formik.touched.departmentName &&
+                    !!formik.errors.departmentName
+                  }
+                >
+                  <FormLabel htmlFor="departmentName">
+                    Department Name
+                  </FormLabel>
+                  <Input
+                    id="departmentName"
+                    name="departmentName"
+                    onChange={formik.handleChange}
+                    value={formik.values.departmentName}
+                  />
+                  <FormErrorMessage>
+                    {formik.errors.departmentName}
+                  </FormErrorMessage>
+                </FormControl>
 
+                <Flex gap={4} flexDirection={["column", "row"]}>
                   <FormControl
                     isInvalid={
                       formik.touched.addressLineOne &&
@@ -191,7 +190,9 @@ const AddDepartmentModal: React.FC = () => {
                       {formik.errors.addressLineTwo}
                     </FormErrorMessage>
                   </FormControl>
+                </Flex>
 
+                <Flex gap={4} flexDirection={["column", "row"]}>
                   <FormControl
                     isInvalid={formik.touched.town && !!formik.errors.town}
                   >
@@ -217,7 +218,6 @@ const AddDepartmentModal: React.FC = () => {
                     />
                     <FormErrorMessage>{formik.errors.county}</FormErrorMessage>
                   </FormControl>
-
                   <FormControl
                     isInvalid={
                       formik.touched.postcode && !!formik.errors.postcode
@@ -234,23 +234,23 @@ const AddDepartmentModal: React.FC = () => {
                       {formik.errors.postcode}
                     </FormErrorMessage>
                   </FormControl>
-
-                  <HStack mt={4} gap={[0, 4]} flex={1}>
-                    <Button flex={1} variant={"orange"} onClick={onClose}>
-                      Cancel
-                    </Button>
-                    <Button
-                      variant={"green"}
-                      type="submit"
-                      isLoading={formik.isSubmitting}
-                      flex={1}
-                    >
-                      Submit
-                    </Button>
-                  </HStack>
                 </Flex>
-              </form>
-            </Box>
+
+                <HStack mt={4} gap={[0, 4]} flex={1}>
+                  <Button flex={1} variant={"orange"} onClick={onClose}>
+                    Cancel
+                  </Button>
+                  <Button
+                    variant={"green"}
+                    type="submit"
+                    isLoading={formik.isSubmitting}
+                    flex={1}
+                  >
+                    Submit
+                  </Button>
+                </HStack>
+              </Flex>
+            </form>
           </ModalBody>
         </ModalContent>
       </Modal>
