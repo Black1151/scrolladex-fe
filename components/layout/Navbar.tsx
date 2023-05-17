@@ -4,7 +4,6 @@ import {
   Flex,
   Text,
   Spacer,
-  useTheme,
   IconButton,
   Drawer,
   DrawerBody,
@@ -22,7 +21,6 @@ import { HamburgerIcon } from "@chakra-ui/icons";
 import CreateEmployeeModal from "../modals/CreateEmployeeModal";
 
 const Navbar = () => {
-  const theme = useTheme();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
