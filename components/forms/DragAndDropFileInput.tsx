@@ -1,5 +1,9 @@
 import React, { FC, useState, useCallback, useRef } from "react";
-import { Button } from "@chakra-ui/react";
+import { Button, Text, VStack } from "@chakra-ui/react";
+import { debounce } from "lodash";
+import { useTheme, Image } from "@chakra-ui/react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCloudUploadAlt } from "@fortawesome/free-solid-svg-icons";
 
 interface DragAndDropFileInputProps {
   onFile: (file: File | null) => void;
@@ -12,13 +16,23 @@ const DragAndDropFileInput: FC<DragAndDropFileInputProps> = ({
 }) => {
   const [drag, setDrag] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const dragCounter = useRef(0);
+
+  const dragEnd = useRef(debounce(() => setDrag(false), 150));
+
+  const theme = useTheme();
 
   const dragInHandler = useCallback(
     (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault();
       event.stopPropagation();
-      setDrag(true);
+      dragCounter.current++;
+      if (event.dataTransfer.items && event.dataTransfer.items.length > 0) {
+        setDrag(true);
+      }
+      dragEnd.current();
     },
     []
   );
@@ -27,7 +41,9 @@ const DragAndDropFileInput: FC<DragAndDropFileInputProps> = ({
     (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault();
       event.stopPropagation();
-      setDrag(false);
+      dragCounter.current--;
+      if (dragCounter.current > 0) return;
+      dragEnd.current();
     },
     []
   );
@@ -45,8 +61,12 @@ const DragAndDropFileInput: FC<DragAndDropFileInputProps> = ({
 
   const handleFile = useCallback(
     (file: File) => {
+      if (!file.type.startsWith("image/")) {
+        setError("Uploaded file is not an image. Please upload an image file.");
+        return;
+      }
+      setError(null);
       onFile(file);
-
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreview(reader.result as string);
@@ -75,21 +95,26 @@ const DragAndDropFileInput: FC<DragAndDropFileInputProps> = ({
   }, [onFile]);
 
   return (
-    <div
+    <VStack
       onDragEnter={dragInHandler}
       onDragLeave={dragOutHandler}
       onDragOver={dragInHandler}
       onDrop={dropHandler}
-      style={{
-        border: "1px solid",
-        borderColor: drag ? "#000" : "#fff",
-        transition: "border-color 0.3s ease-in-out",
-        backgroundColor: drag ? "#f0f0f0" : "#fff",
-        padding: "20px",
-        textAlign: "center",
-      }}
+      border={error ? "1px solid red" : "1px solid"}
+      borderColor={drag ? "pictonBlue" : "medPBlue"}
+      borderRadius="20px"
+      transition="border-color 0.3s ease-in-out"
+      backgroundColor={drag ? "lightPBlue" : "#fff"}
+      p="20px"
+      textAlign="center"
+      display="flex"
+      flexDirection="column"
+      justifyContent="center"
+      alignItems="center"
+      gap={4}
       {...props}
     >
+      {error && <p style={{ color: "red" }}>{error}</p>}
       <input
         ref={fileInputRef}
         type="file"
@@ -98,28 +123,29 @@ const DragAndDropFileInput: FC<DragAndDropFileInputProps> = ({
       />
       {preview ? (
         <>
-          <img
-            src={preview}
-            alt="preview"
-            style={{ width: "100%", height: "auto" }}
-          />
-          <Button onClick={resetHandler} mt={4}>
+          <Image src={preview} alt="preview" boxSize="100%" objectFit="cover" />
+          <Button variant="blue" onClick={resetHandler} mt={4}>
             Change File
           </Button>
         </>
       ) : (
         <>
-          <p>
+          <Text color="pictonBlue">
             {drag
               ? "Drop the file here..."
-              : "Drag 'n' drop a file here, or click the button to select a file"}
-          </p>
-          <Button onClick={browseFilesHandler} mt={4}>
+              : "Drag a file here, or click the button to select a file"}
+          </Text>
+          <FontAwesomeIcon
+            color={drag ? theme.colors.pictonBlue : theme.colors.medPBlue}
+            icon={faCloudUploadAlt}
+            size="3x"
+          />
+          <Button variant="blue" onClick={browseFilesHandler} mt={4}>
             Browse Files
           </Button>
         </>
       )}
-    </div>
+    </VStack>
   );
 };
 
