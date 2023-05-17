@@ -177,30 +177,6 @@ const EmployeeForm = () => {
             </FormControl>
           </Flex>
 
-          {/* <FormControl
-            isInvalid={
-              formik.touched.profilePicture && !!formik.errors.profilePicture
-            }
-          >
-            <FormLabel htmlFor="profilePicture">Profile Picture</FormLabel>
-            <input
-              id="profilePicture"
-              name="profilePicture"
-              type="file"
-              onChange={(event) => {
-                if (event.currentTarget.files) {
-                  formik.setFieldValue(
-                    "profilePicture",
-                    event.currentTarget.files[0]
-                  );
-                }
-              }}
-            />
-            <FormErrorMessage>
-              {formik.getFieldMeta("profilePicture").error}
-            </FormErrorMessage>
-          </FormControl> */}
-
           <FormControl
             isInvalid={
               formik.touched.profilePicture && !!formik.errors.profilePicture
