@@ -1,4 +1,3 @@
-// apiClient.ts
 import axios, { AxiosResponse } from 'axios';
 import { camelCase, snakeCase, mapKeys, isObject } from "lodash";
 
