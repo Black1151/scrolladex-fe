@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import apiClient from './apiClient';
 
 interface Employee {
   id?: number;
@@ -13,13 +13,9 @@ interface Employee {
   profilePicture: string;
 }
 
-const api = axios.create({
-  baseURL: 'http://localhost:3333', 
-});
-
 export const getEmployeesAPI = async (): Promise<Employee[] | null> => {
   try {
-    const response: AxiosResponse<Employee[]> = await api.get('/employees');
+    const response = await apiClient.get<Employee[]>('/employees');
     return response.data;
   } catch (error) {
     console.error('Error getting employees', error);
@@ -29,7 +25,7 @@ export const getEmployeesAPI = async (): Promise<Employee[] | null> => {
 
 export const getEmployeeAPI = async (id: number): Promise<Employee | null> => {
   try {
-    const response: AxiosResponse<Employee> = await api.get(`/employees/${id}`);
+    const response = await apiClient.get<Employee>(`/employees/${id}`);
     return response.data;
   } catch (error) {
     console.error(`Error getting employee with id ${id}`, error);
@@ -39,7 +35,7 @@ export const getEmployeeAPI = async (id: number): Promise<Employee | null> => {
 
 export const createEmployeeAPI = async (data: Employee): Promise<Employee | null> => {
   try {
-    const response: AxiosResponse<Employee> = await api.post('/employees', data);
+    const response = await apiClient.post<Employee>('/employees', data);
     return response.data;
   } catch (error) {
     console.error('Error creating employee', error);
@@ -49,7 +45,7 @@ export const createEmployeeAPI = async (data: Employee): Promise<Employee | null
 
 export const updateEmployeeAPI = async (id: number, data: Employee): Promise<Employee | null> => {
   try {
-    const response: AxiosResponse<Employee> = await api.put(`/employees/${id}`, data);
+    const response = await apiClient.put<Employee>(`/employees/${id}`, data);
     return response.data;
   } catch (error) {
     console.error(`Error updating employee with id ${id}`, error);
@@ -57,12 +53,10 @@ export const updateEmployeeAPI = async (id: number, data: Employee): Promise<Emp
   }
 };
 
-export const deleteEmployeeAPI = async (id: number): Promise<Employee | null> => {
+export const deleteEmployeeAPI = async (id: number): Promise<void> => {
   try {
-    const response: AxiosResponse<Employee> = await api.delete(`/employees/${id}`);
-    return response.data;
+    await apiClient.delete(`/employees/${id}`);
   } catch (error) {
     console.error(`Error deleting employee with id ${id}`, error);
-    return null;
   }
 };
