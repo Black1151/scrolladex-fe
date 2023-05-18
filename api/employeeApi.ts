@@ -33,10 +33,10 @@ export const getEmployeeAPI = async (id: number): Promise<Employee | null> => {
   }
 };
 
-export const createEmployeeAPI = async (data: Employee): Promise<Employee | null> => {
+export const createEmployeeAPI = async (data: Employee): Promise<number | null> => {
   try {
     const response = await apiClient.post<Employee>('/employees', data);
-    return response.data;
+    return response.status;
   } catch (error) {
     console.error('Error creating employee', error);
     return null;
