@@ -34,10 +34,10 @@ export const getDepartmentAPI = async (id: number): Promise<Department | null> =
   }
 };
 
-export const createDepartmentAPI = async (data: Department): Promise<Department | null> => {
+export const createDepartmentAPI = async (data: Department): Promise<null | number> => {
   try {
     const response: AxiosResponse<Department> = await api.post('/departments', data);
-    return response.data;
+    return response.status;
   } catch (error) {
     console.error('Error creating department', error);
     return null;

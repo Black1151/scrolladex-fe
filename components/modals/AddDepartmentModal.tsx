@@ -68,20 +68,17 @@ const AddDepartmentModal: React.FC = () => {
     onSubmit: async (values, actions) => {
       try {
         const response = await createDepartmentAPI(values);
-
-        if (!response) {
+        if (response == 200) {
+          showSuccesModal();
+        } else {
           showErrorModal();
         }
-
-        actions.setSubmitting(false);
-        onModalClose();
-        showSuccesModal();
       } catch (error) {
         console.error(error);
-        actions.setSubmitting(false);
-        onModalClose();
-        onConfirmationOpen();
         showErrorModal();
+      } finally {
+        actions.setSubmitting(false);
+        onClose();
       }
     },
   });
