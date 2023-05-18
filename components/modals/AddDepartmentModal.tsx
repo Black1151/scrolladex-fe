@@ -51,7 +51,7 @@ const AddDepartmentModal: React.FC = () => {
 
   const showSuccesModal = () => {
     setConfirmationStatus("success");
-    setConfirmationMessage("Department was added successfully!");
+    setConfirmationMessage("Department was added successfully");
     onConfirmationOpen();
   };
 
