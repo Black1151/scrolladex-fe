@@ -1,4 +1,5 @@
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
+import apiClient from './apiClient';
 
 interface Department {
   id?: number;
@@ -10,13 +11,9 @@ interface Department {
   postcode: string;
 }
 
-const api = axios.create({
-  baseURL: 'http://localhost:3333', 
-});
-
 export const getDepartmentsAPI = async (): Promise<Department[] | null> => {
   try {
-    const response: AxiosResponse<Department[]> = await api.get('/departments');
+    const response: AxiosResponse<Department[]> = await apiClient.get('/departments');
     return response.data;
   } catch (error) {
     console.error('Error getting departments', error);
@@ -26,7 +23,7 @@ export const getDepartmentsAPI = async (): Promise<Department[] | null> => {
 
 export const getDepartmentAPI = async (id: number): Promise<Department | null> => {
   try {
-    const response: AxiosResponse<Department> = await api.get(`/departments/${id}`);
+    const response: AxiosResponse<Department> = await apiClient.get(`/departments/${id}`);
     return response.data;
   } catch (error) {
     console.error(`Error getting department with id ${id}`, error);
@@ -34,9 +31,9 @@ export const getDepartmentAPI = async (id: number): Promise<Department | null> =
   }
 };
 
-export const createDepartmentAPI = async (data: Department): Promise<null | number> => {
+export const createDepartmentAPI = async (data: Department): Promise<number | null> => {
   try {
-    const response: AxiosResponse<Department> = await api.post('/departments', data);
+    const response: AxiosResponse<Department> = await apiClient.post('/departments', data);
     return response.status;
   } catch (error) {
     console.error('Error creating department', error);
@@ -46,7 +43,7 @@ export const createDepartmentAPI = async (data: Department): Promise<null | numb
 
 export const updateDepartmentAPI = async (id: number, data: Department): Promise<Department | null> => {
   try {
-    const response: AxiosResponse<Department> = await api.put(`/departments/${id}`, data);
+    const response: AxiosResponse<Department> = await apiClient.put(`/departments/${id}`, data);
     return response.data;
   } catch (error) {
     console.error(`Error updating department with id ${id}`, error);
@@ -56,7 +53,7 @@ export const updateDepartmentAPI = async (id: number, data: Department): Promise
 
 export const deleteDepartmentAPI = async (id: number): Promise<Department | null> => {
   try {
-    const response: AxiosResponse<Department> = await api.delete(`/departments/${id}`);
+    const response: AxiosResponse<Department> = await apiClient.delete(`/departments/${id}`);
     return response.data;
   } catch (error) {
     console.error(`Error deleting department with id ${id}`, error);
