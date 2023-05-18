@@ -22,6 +22,7 @@ import { FaTimes } from "react-icons/fa";
 import DragAndDropFileInput from "../forms/DragAndDropFileInput";
 import { createEmployeeAPI } from "@/api/employeeApi";
 import ConfirmationModal from "./ConfirmationModal";
+import { DepartmentListItem } from "@/types";
 
 const validationSchema = Yup.object({
   title: Yup.string().required("Title is a required field."),
@@ -39,7 +40,11 @@ const validationSchema = Yup.object({
   ),
 });
 
-const AddEmployeeModal: React.FC = () => {
+interface Props {
+  departmentList: DepartmentListItem[];
+}
+
+const AddEmployeeModal: React.FC<Props> = ({ departmentList }) => {
   const { isOpen, onOpen, onClose: onModalClose } = useDisclosure();
   const {
     isOpen: isConfirmationOpen,
@@ -243,9 +248,15 @@ const AddEmployeeModal: React.FC = () => {
                         onChange={formik.handleChange}
                         value={formik.values.departmentId}
                       >
-                        <option value="1">Personnel</option>
+                        {departmentList.map((department) => (
+                          <option value={department.id}>
+                            {department.departmentName}
+                          </option>
+                        ))}
+
+                        {/* <option value="1">Personnel</option>
                         <option value="2">Accounts</option>
-                        <option value="3">Marketing</option>
+                        <option value="3">Marketing</option> */}
                       </Select>
                       <FormErrorMessage>
                         {formik.errors.departmentId}

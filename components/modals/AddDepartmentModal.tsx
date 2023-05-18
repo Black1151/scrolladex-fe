@@ -30,7 +30,13 @@ const validationSchema = Yup.object({
   postcode: Yup.string().required("Postcode is a required field."),
 });
 
-const AddDepartmentModal: React.FC = () => {
+interface AddDepartmentModalProps {
+  handleDepartmentAdded: () => void;
+}
+
+const AddDepartmentModal: React.FC<AddDepartmentModalProps> = ({
+  handleDepartmentAdded,
+}) => {
   const { isOpen, onOpen, onClose: onModalClose } = useDisclosure();
   const {
     isOpen: isConfirmationOpen,
@@ -70,6 +76,7 @@ const AddDepartmentModal: React.FC = () => {
         const response = await createDepartmentAPI(values);
         if (response == 200) {
           showSuccesModal();
+          handleDepartmentAdded();
         } else {
           showErrorModal();
         }

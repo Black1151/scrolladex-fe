@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Flex,
@@ -19,9 +19,33 @@ import { HamburgerIcon } from "@chakra-ui/icons";
 
 import AddEmployeeModal from "../modals/AddEmployeeModal";
 import AddDepartmentModal from "../modals/AddDepartmentModal";
+import { getDepartmentsAPI } from "@/api/departmentAPI";
+import { DepartmentListItem } from "@/types";
 
 const Navbar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [departmentList, setDepartmentList] = useState<DepartmentListItem[]>(
+    []
+  );
+
+  const createDepartmentDropdownList = async () => {
+    const departments = await getDepartmentsAPI();
+    if (departments != null) {
+      const newDepartmentsArray = departments.map((department) => ({
+        id: department.id as number,
+        departmentName: department.departmentName,
+      }));
+      setDepartmentList(newDepartmentsArray);
+    }
+  };
+
+  const handleDepartmentAdded = () => {
+    createDepartmentDropdownList();
+  };
+
+  useEffect(() => {
+    createDepartmentDropdownList();
+  }, []);
 
   return (
     <Flex
@@ -43,8 +67,8 @@ const Navbar = () => {
       </VStack>
       <Spacer />
       <HStack display={{ base: "none", md: "flex" }}>
-        <AddEmployeeModal />
-        <AddDepartmentModal />
+        <AddEmployeeModal departmentList={departmentList} />
+        <AddDepartmentModal handleDepartmentAdded={handleDepartmentAdded} />
       </HStack>
       <Box display={{ base: "block", md: "none" }}>
         <IconButton
@@ -58,8 +82,10 @@ const Navbar = () => {
             <DrawerCloseButton />
             <DrawerHeader>Menu</DrawerHeader>
             <DrawerBody>
-              <AddEmployeeModal />
-              <AddDepartmentModal />
+              <AddEmployeeModal departmentList={departmentList} />
+              <AddDepartmentModal
+                handleDepartmentAdded={handleDepartmentAdded}
+              />
             </DrawerBody>
           </DrawerContent>
         </Drawer>
