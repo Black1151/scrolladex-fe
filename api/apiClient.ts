@@ -2,23 +2,23 @@
 import axios, { AxiosResponse } from 'axios';
 import { camelCase, snakeCase, mapKeys, isObject } from "lodash";
 
-const toCamelCase = (obj: any): any => {
-  if (Array.isArray(obj)) {
-    return obj.map((item) => toCamelCase(item));
-  } else if (isObject(obj)) {
-    return mapKeys(obj, (key) => camelCase(key));
+const toSnakeCase = (data: any): any => {
+  if (Array.isArray(data)) {
+    return data.map(item => toSnakeCase(item));
+  } else if (isObject(data)) {
+    return mapKeys(data, (_, key) => snakeCase(key));
   } else {
-    return obj;
+    return data;
   }
 };
 
-const toSnakeCase = (obj: any): any => {
-  if (Array.isArray(obj)) {
-    return obj.map((item) => toSnakeCase(item));
-  } else if (isObject(obj)) {
-    return mapKeys(obj, (key) => snakeCase(key));
+const toCamelCase = (data: any): any => {
+  if (Array.isArray(data)) {
+    return data.map(item => toCamelCase(item));
+  } else if (isObject(data)) {
+    return mapKeys(data, (_, key) => camelCase(key));
   } else {
-    return obj;
+    return data;
   }
 };
 
