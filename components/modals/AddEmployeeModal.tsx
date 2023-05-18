@@ -52,6 +52,18 @@ const AddEmployeeModal: React.FC = () => {
     "success" | "error"
   >("success");
 
+  const showErrorModal = () => {
+    setConfirmationStatus("error");
+    setConfirmationMessage("An error occurred while adding the employee.");
+    onConfirmationOpen();
+  };
+
+  const showSuccesModal = () => {
+    setConfirmationStatus("success");
+    setConfirmationMessage("Department was added department");
+    onConfirmationOpen();
+  };
+
   const formik = useFormik({
     initialValues: {
       title: "",
@@ -66,24 +78,20 @@ const AddEmployeeModal: React.FC = () => {
     },
     validationSchema,
     onSubmit: async (values, actions) => {
-      const response = await createEmployeeAPI(values);
-
-      console.log(response);
-
-      //   try {
-      //     const response = await createEmployeeAPI(values);
-      //     setConfirmationStatus("success");
-      //     setConfirmationMessage("Employee was added successfully!");
-      //     actions.setSubmitting(false);
-      //     onModalClose();
-      //     onConfirmationOpen();
-      //   } catch (error) {
-      //     setConfirmationStatus("error");
-      //     setConfirmationMessage("An error occurred while adding the employee.");
-      //     actions.setSubmitting(false);
-      //     onModalClose();
-      //     onConfirmationOpen();
-      //   }
+      try {
+        const response = await createEmployeeAPI(values);
+        if (response == 200) {
+          showSuccesModal();
+        } else {
+          showErrorModal();
+        }
+      } catch (error) {
+        console.error(error);
+        showErrorModal();
+      } finally {
+        actions.setSubmitting(false);
+        onClose();
+      }
     },
   });
 
