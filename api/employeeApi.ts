@@ -1,17 +1,5 @@
 import apiClient from './apiClient';
-
-interface Employee {
-  id?: number;
-  title: string;
-  firstName: string;
-  lastName: string;
-  empNo: string;
-  jobTitle: string;
-  departmentId: string;
-  telephone: string;
-  email: string;
-  profilePicture: string;
-}
+import { Employee, EmployeeOverview } from '../types';
 
 export const getEmployeesAPI = async (): Promise<Employee[] | null> => {
   try {
@@ -19,6 +7,16 @@ export const getEmployeesAPI = async (): Promise<Employee[] | null> => {
     return response.data;
   } catch (error) {
     console.error('Error getting employees', error);
+    return null;
+  }
+};
+
+export const getEmployeesOverviewAPI = async (): Promise<EmployeeOverview[] | null> => {
+  try {
+    const response = await apiClient.get<EmployeeOverview[]>('/employees/overview');
+    return response.data;
+  } catch (error) {
+    console.error('Error getting employees overview', error);
     return null;
   }
 };
