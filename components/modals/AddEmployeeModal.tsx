@@ -79,7 +79,7 @@ const AddEmployeeModal: React.FC<Props> = ({ departmentList }) => {
       departmentId: "",
       telephone: "",
       email: "",
-      profilePicture: "",
+      profilePicture: null,
     },
     validationSchema,
     onSubmit: async (values, actions) => {
@@ -248,15 +248,12 @@ const AddEmployeeModal: React.FC<Props> = ({ departmentList }) => {
                         onChange={formik.handleChange}
                         value={formik.values.departmentId}
                       >
+                        <option value="">Select</option>
                         {departmentList.map((department) => (
                           <option value={department.id}>
                             {department.departmentName}
                           </option>
                         ))}
-
-                        {/* <option value="1">Personnel</option>
-                        <option value="2">Accounts</option>
-                        <option value="3">Marketing</option> */}
                       </Select>
                       <FormErrorMessage>
                         {formik.errors.departmentId}
