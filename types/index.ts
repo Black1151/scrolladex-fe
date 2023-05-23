@@ -4,7 +4,7 @@ export type DepartmentListItem = {
   };
 
 export interface Employee {
-    id?: number;
+    id: number;
     title: string;
     firstName: string;
     lastName: string;
@@ -13,7 +13,13 @@ export interface Employee {
     departmentId: string;
     telephone: string;
     email: string;
-    profilePicture: File | Blob | null;
+    profilePictureUrl: string | null;
   }
 
-export type EmployeeOverview = Pick<Employee, 'title' | 'firstName' | 'lastName' | 'jobTitle' | 'departmentId'> & { id: number };
+export type EmployeeCreateUpdate = Omit<Employee, 'profilePictureUrl' | 'id'> & {
+    id?: number;
+    profilePicture: File | Blob | null;
+};
+
+
+export type EmployeeOverview = Pick<Employee, 'title' | 'firstName' | 'lastName' | 'jobTitle' | 'departmentId' | 'profilePictureUrl'> & { id: number };
