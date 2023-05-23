@@ -250,7 +250,7 @@ const AddEmployeeModal: React.FC<Props> = ({ departmentList }) => {
                       >
                         <option value="">Select</option>
                         {departmentList.map((department) => (
-                          <option value={department.id}>
+                          <option key={department.id} value={department.id}>
                             {department.departmentName}
                           </option>
                         ))}
