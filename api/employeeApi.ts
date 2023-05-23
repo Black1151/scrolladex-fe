@@ -1,5 +1,5 @@
 import apiClient from './apiClient';
-import { Employee, EmployeeOverview } from '../types';
+import { Employee, EmployeeOverview, EmployeeCreateUpdate } from '../types';
 
 export const getEmployeesAPI = async (): Promise<Employee[] | null> => {
   try {
@@ -31,7 +31,7 @@ export const getEmployeeAPI = async (id: number): Promise<Employee | null> => {
   }
 };
 
-export const createEmployeeAPI = async (data: Employee): Promise<number | null> => {
+export const createEmployeeAPI = async (data: EmployeeCreateUpdate): Promise<number | null> => {
   try {
     const response = await apiClient.post<Employee>('/employees', data);
     return response.status;
@@ -41,12 +41,12 @@ export const createEmployeeAPI = async (data: Employee): Promise<number | null> 
   }
 };
 
-export const updateEmployeeAPI = async (id: number, data: Employee): Promise<Employee | null> => {
+export const updateEmployeeAPI = async (data: EmployeeCreateUpdate): Promise<Employee | null> => {
   try {
-    const response = await apiClient.put<Employee>(`/employees/${id}`, data);
+    const response = await apiClient.put<Employee>(`/employees/${data.id}`, data);
     return response.data;
   } catch (error) {
-    console.error(`Error updating employee with id ${id}`, error);
+    console.error(`Error updating employee with id ${data.id}`, error);
     return null;
   }
 };
