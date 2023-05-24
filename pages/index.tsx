@@ -1,14 +1,28 @@
 import React, { useState, useEffect } from "react";
-import { Box, Text, Heading, SimpleGrid, Flex, Image } from "@chakra-ui/react";
+import {
+  Box,
+  Text,
+  Heading,
+  SimpleGrid,
+  Flex,
+  Image,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { delay, motion } from "framer-motion";
 import { getEmployeesOverviewAPI } from "../api/employeeApi";
 import { EmployeeOverview } from "../types";
+import EmployeeDetailsModal from "@/components/modals/EmployeeDetailsModal";
 
 const MotionBox = motion(Box);
 
 const Index = () => {
   const [employees, setEmployees] = useState<EmployeeOverview[]>([]);
   const [loaded, setLoaded] = useState<boolean[]>([]);
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState<number | null>(
+    null
+  );
+
+  const { isOpen, onOpen, onClose } = useDisclosure(); // useDisclosure hook
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -30,6 +44,11 @@ const Index = () => {
     });
   };
 
+  const handleCardClick = (id: number) => {
+    setSelectedEmployeeId(id);
+    onOpen();
+  };
+
   return (
     <MotionBox
       p={5}
@@ -49,6 +68,7 @@ const Index = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: loaded[index] ? 1 : 0 }}
             transition={{ duration: Math.random() * 1 }}
+            onClick={() => handleCardClick(employee.id)}
           >
             <Box
               bg="white"
@@ -73,6 +93,9 @@ const Index = () => {
                   <Text mt={2} fontSize="sm">
                     {employee.jobTitle}
                   </Text>
+                  <Text mt={2} fontSize="sm">
+                    {employee.departmentName}
+                  </Text>
                 </Box>
                 <Box mr={4}>
                   <Image
@@ -91,6 +114,14 @@ const Index = () => {
           </MotionBox>
         ))}
       </SimpleGrid>
+
+      {selectedEmployeeId && (
+        <EmployeeDetailsModal
+          isOpen={isOpen}
+          onClose={onClose}
+          id={selectedEmployeeId}
+        />
+      )}
     </MotionBox>
   );
 };
