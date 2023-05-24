@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Box, Text, Heading, SimpleGrid, Flex, Image } from "@chakra-ui/react";
-import { motion } from "framer-motion";
+import { delay, motion } from "framer-motion";
 import { getEmployeesOverviewAPI } from "../api/employeeApi";
 import { EmployeeOverview } from "../types";
 
@@ -31,9 +31,15 @@ const Index = () => {
   };
 
   return (
-    <Box p={5} bg="medPBlue">
+    <MotionBox
+      p={5}
+      bg="medPBlue"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5, delay: 0.2 }}
+    >
       <SimpleGrid
-        columns={{ base: 1, md: 2, lg: 3 }}
+        columns={{ base: 1, md: 2, lg: 3, xl: 4 }}
         spacing={5}
         position="relative"
       >
@@ -54,17 +60,19 @@ const Index = () => {
               zIndex={0}
               position="relative"
               _hover={{
-                transform: "scale(1.05)",
+                transform: "scale(1.025)",
                 shadow: "xl",
                 zIndex: 10,
               }}
             >
               <Flex justifyContent="space-between">
-                <Box>
+                <Box whiteSpace="nowrap">
                   <Heading fontSize="xl">
                     {employee.firstName} {employee.lastName}
                   </Heading>
-                  <Text mt={2}>{employee.jobTitle}</Text>
+                  <Text mt={2} fontSize="sm">
+                    {employee.jobTitle}
+                  </Text>
                 </Box>
                 <Box mr={4}>
                   <Image
@@ -83,7 +91,7 @@ const Index = () => {
           </MotionBox>
         ))}
       </SimpleGrid>
-    </Box>
+    </MotionBox>
   );
 };
 
