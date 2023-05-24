@@ -11,6 +11,7 @@ export interface Employee {
     empNo: string;
     jobTitle: string;
     departmentId: string;
+    departmentName?: string;
     telephone: string;
     email: string;
     profilePictureUrl: string | null;
@@ -22,4 +23,4 @@ export type EmployeeCreateUpdate = Omit<Employee, 'profilePictureUrl' | 'id'> & 
 };
 
 
-export type EmployeeOverview = Pick<Employee, 'title' | 'firstName' | 'lastName' | 'jobTitle' | 'departmentId' | 'profilePictureUrl'> & { id: number };
+export type EmployeeOverview = Pick<Employee, 'firstName' | 'lastName' | 'jobTitle' | 'departmentName' | 'profilePictureUrl'> & { id: number };
