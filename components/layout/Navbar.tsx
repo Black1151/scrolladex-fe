@@ -14,6 +14,7 @@ import {
   useDisclosure,
   VStack,
   HStack,
+  useToast,
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 
@@ -29,16 +30,28 @@ const Navbar = () => {
     []
   );
 
+  const toast = useToast();
+
   const MotionBox = motion(Box);
 
   const createDepartmentDropdownList = async () => {
-    const departments = await getDepartmentsAPI();
-    if (departments != null) {
-      const newDepartmentsArray = departments.map((department) => ({
-        id: department.id as number,
-        departmentName: department.departmentName,
-      }));
-      setDepartmentList(newDepartmentsArray);
+    try {
+      const departments = await getDepartmentsAPI();
+      if (departments != null) {
+        const newDepartmentsArray = departments.map((department) => ({
+          id: department.id as number,
+          departmentName: department.departmentName,
+        }));
+        setDepartmentList(newDepartmentsArray);
+      }
+    } catch (error: any) {
+      toast({
+        title: "An error occurred.",
+        description: error.message,
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
     }
   };
 
