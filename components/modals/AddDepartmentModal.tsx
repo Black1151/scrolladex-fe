@@ -74,15 +74,18 @@ const AddDepartmentModal: React.FC<AddDepartmentModalProps> = ({
     onSubmit: async (values, actions) => {
       try {
         const response = await createDepartmentAPI(values);
-        if (response == 200) {
-          showSuccesModal();
-          handleDepartmentAdded();
-        } else {
-          showErrorModal();
-        }
-      } catch (error) {
+        showSuccesModal();
+        handleDepartmentAdded();
+      } catch (error: unknown) {
         console.error(error);
+        if (error instanceof Error) {
+          setConfirmationMessage(
+            error.message || "An unexpected error occurred."
+          );
+          setConfirmationStatus("error");
+        }
         showErrorModal();
+        onConfirmationOpen();
       } finally {
         actions.setSubmitting(false);
         onClose();

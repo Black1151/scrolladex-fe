@@ -65,7 +65,7 @@ const AddEmployeeModal: React.FC<Props> = ({ departmentList }) => {
 
   const showSuccesModal = () => {
     setConfirmationStatus("success");
-    setConfirmationMessage("Department was added department");
+    setConfirmationMessage("Employee was added succesfully");
     onConfirmationOpen();
   };
 
@@ -85,14 +85,17 @@ const AddEmployeeModal: React.FC<Props> = ({ departmentList }) => {
     onSubmit: async (values, actions) => {
       try {
         const response = await createEmployeeAPI(values);
-        if (response == 200) {
-          showSuccesModal();
-        } else {
-          showErrorModal();
-        }
-      } catch (error) {
+        showSuccesModal();
+      } catch (error: unknown) {
         console.error(error);
+        if (error instanceof Error) {
+          setConfirmationStatus("error");
+          setConfirmationMessage(
+            error.message || "An unexpected error occurred."
+          );
+        }
         showErrorModal();
+        onConfirmationOpen();
       } finally {
         actions.setSubmitting(false);
         onClose();
