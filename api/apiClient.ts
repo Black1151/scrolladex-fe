@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import { camelCase, snakeCase, mapKeys, isObject } from "lodash";
+import { ErrorObject } from '@/types';
 
 const convertKeys = (data: any, converter: (key: string) => string): any => {
   if (Array.isArray(data)) {
@@ -58,14 +59,43 @@ const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_SERVER_ADDRESS,
 });
 
+const getErrorMessage = (error : ErrorObject) => {
+  if (error.response) {
+    switch (error.response.status) {
+      case 400:
+        return 'Bad Request';
+      case 401:
+        return 'Unauthorized';
+      case 403:
+        return 'Forbidden';
+      case 404:
+        return 'Not Found';
+      case 500:
+        return "Internal Server Error:";
+      default:
+        return 'An unexpected error occurred.';
+    }
+  } else if (error.request) {
+    return 'No response was received from the server.';
+  } else {
+    return 'An error occurred while making the request.';
+  }
+};
+
 
 apiClient.interceptors.request.use(handleFormData);
 
-apiClient.interceptors.response.use((response: AxiosResponse) => {
-  if (response.data) {
-    response.data = convertKeys(response.data, camelCase);
+apiClient.interceptors.response.use(
+  (response: AxiosResponse) => {
+    if (response.data) {
+      response.data = convertKeys(response.data, camelCase);
+    }
+    return response;
+  },
+  (error) => {
+    error.message = getErrorMessage(error);
+    return Promise.reject(error);
   }
-  return response;
-});
+);
 
 export default apiClient;
