@@ -17,7 +17,7 @@ export const getDepartmentsAPI = async (): Promise<Department[] | null> => {
     return response.data;
   } catch (error) {
     console.error('Error getting departments', error);
-    return null;
+    throw error;
   }
 };
 
@@ -27,7 +27,7 @@ export const getDepartmentAPI = async (id: number): Promise<Department | null> =
     return response.data;
   } catch (error) {
     console.error(`Error getting department with id ${id}`, error);
-    return null;
+    throw error;
   }
 };
 
@@ -37,7 +37,7 @@ export const createDepartmentAPI = async (data: Department): Promise<number | nu
     return response.status;
   } catch (error) {
     console.error('Error creating department', error);
-    return null;
+    throw error;
   }
 };
 
@@ -47,7 +47,7 @@ export const updateDepartmentAPI = async (id: number, data: Department): Promise
     return response.data;
   } catch (error) {
     console.error(`Error updating department with id ${id}`, error);
-    return null;
+    throw error;
   }
 };
 
@@ -57,6 +57,6 @@ export const deleteDepartmentAPI = async (id: number): Promise<Department | null
     return response.data;
   } catch (error) {
     console.error(`Error deleting department with id ${id}`, error);
-    return null;
+    throw error;
   }
 };
