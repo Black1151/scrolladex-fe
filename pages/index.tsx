@@ -7,8 +7,9 @@ import {
   Flex,
   Image,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
-import { delay, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { getEmployeesOverviewAPI } from "../api/employeeApi";
 import { EmployeeOverview } from "../types";
 import EmployeeDetailsModal from "@/components/modals/EmployeeDetailsModal";
@@ -22,14 +23,26 @@ const Index = () => {
     null
   );
 
-  const { isOpen, onOpen, onClose } = useDisclosure(); // useDisclosure hook
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
 
   useEffect(() => {
     const fetchEmployees = async () => {
-      const data = await getEmployeesOverviewAPI();
-      if (data) {
-        setEmployees(data);
-        setLoaded(new Array(data.length).fill(false));
+      try {
+        const data = await getEmployeesOverviewAPI();
+        if (data) {
+          setEmployees(data);
+          setLoaded(new Array(data.length).fill(false));
+        }
+      } catch (error: any) {
+        toast({
+          title: "Error",
+          description: `Failed to call API: ${error.message}`,
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+        throw error;
       }
     };
 
@@ -69,6 +82,7 @@ const Index = () => {
             animate={{ opacity: loaded[index] ? 1 : 0 }}
             transition={{ duration: Math.random() * 1 }}
             onClick={() => handleCardClick(employee.id)}
+            cursor="pointer"
           >
             <Box
               bg="white"
