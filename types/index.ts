@@ -1,3 +1,10 @@
+export interface ErrorObject {
+  response?: {
+    status: number;
+  };
+  request?: any;
+}
+
 export type DepartmentListItem = {
     id: number;
     departmentName: string;
