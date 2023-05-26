@@ -78,7 +78,6 @@ const AddEmployeeModal: React.FC<Props> = ({
             <Flex flexDirection={["column", null, "row"]} gap={4}>
               <AppFormInput
                 type="select"
-                id="title"
                 name="title"
                 label="Title"
                 options={[
@@ -91,39 +90,15 @@ const AddEmployeeModal: React.FC<Props> = ({
                 ]}
               />
 
-              <AppFormInput
-                type="text"
-                id="firstName"
-                name="firstName"
-                label="First Name"
-              />
-
-              <AppFormInput
-                type="text"
-                id="lastName"
-                name="lastName"
-                label="Last Name"
-              />
-
-              <AppFormInput
-                type="text"
-                id="empNo"
-                name="empNo"
-                label="Employee Number"
-              />
+              <AppFormInput type="text" name="firstName" label="First Name" />
+              <AppFormInput type="text" name="lastName" label="Last Name" />
+              <AppFormInput type="text" name="empNo" label="Employee Number" />
             </Flex>
-
             <Flex flexDirection={["column", null, "row"]} gap={4}>
-              <AppFormInput
-                type="text"
-                id="jobTitle"
-                name="jobTitle"
-                label="Job Title"
-              />
+              <AppFormInput type="text" name="jobTitle" label="Job Title" />
 
               <AppFormInput
                 type="select"
-                id="departmentId"
                 name="departmentId"
                 label="Department"
                 options={departmentList.map((department) => ({
@@ -132,23 +107,10 @@ const AddEmployeeModal: React.FC<Props> = ({
                 }))}
               />
             </Flex>
-
             <Flex flexDirection={["column", null, "row"]} gap={4}>
-              <AppFormInput
-                type="text"
-                id="telephone"
-                name="telephone"
-                label="Telephone"
-              />
-
-              <AppFormInput
-                type="email"
-                id="email"
-                name="email"
-                label="Email"
-              />
+              <AppFormInput type="text" name="telephone" label="Telephone" />
+              <AppFormInput type="email" name="email" label="Email" />
             </Flex>
-
             <FormControl
               isInvalid={
                 formik.touched.profilePicture && !!formik.errors.profilePicture
@@ -164,7 +126,6 @@ const AddEmployeeModal: React.FC<Props> = ({
                 {formik.errors.profilePicture}
               </FormErrorMessage>
             </FormControl>
-
             <HStack mt={4} gap={[0, 4]} flex={1}>
               <Button flex={1} variant={"orange"} onClick={onClose}>
                 Cancel

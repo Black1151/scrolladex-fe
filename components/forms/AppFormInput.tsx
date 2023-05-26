@@ -14,7 +14,6 @@ interface Option {
 }
 
 interface AppFormInputProps {
-  id: string;
   label: string;
   name: string;
   type: "text" | "email" | "select" | "number";
@@ -22,7 +21,6 @@ interface AppFormInputProps {
 }
 
 const AppFormInput: React.FC<AppFormInputProps> = ({
-  id,
   label,
   name,
   type,
@@ -34,7 +32,7 @@ const AppFormInput: React.FC<AppFormInputProps> = ({
   switch (type) {
     case "select":
       inputElement = (
-        <Select {...field} id={id} placeholder="Select option">
+        <Select {...field} id={name} placeholder="Select option">
           {options?.map((option, index) => (
             <option key={index} value={option.value}>
               {option.label}
@@ -47,13 +45,13 @@ const AppFormInput: React.FC<AppFormInputProps> = ({
     case "email":
     case "number":
     default:
-      inputElement = <Input {...field} id={id} type={type} />;
+      inputElement = <Input {...field} id={name} type={type} />;
       break;
   }
 
   return (
     <FormControl isInvalid={meta.touched && !!meta.error}>
-      <FormLabel htmlFor={id}>{label}</FormLabel>
+      <FormLabel htmlFor={name}>{label}</FormLabel>
       {inputElement}
       <FormErrorMessage>{meta.error}</FormErrorMessage>
     </FormControl>

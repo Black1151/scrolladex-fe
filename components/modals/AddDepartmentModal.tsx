@@ -49,46 +49,27 @@ const AddDepartmentModal: React.FC<FormModalProps> = ({
         <form onSubmit={formik.handleSubmit}>
           <Flex p={4} gap={4} flexDirection="column">
             <AppFormInput
-              id="departmentName"
               label="Department Name"
               name="departmentName"
               type="text"
             />
-
             <Flex gap={4} flexDirection={["column", "row"]}>
               <AppFormInput
-                id="addressLineOne"
                 label="Address Line 1"
                 name="addressLineOne"
                 type="text"
               />
-
               <AppFormInput
-                id="addressLineTwo"
                 label="Address Line 2"
                 name="addressLineTwo"
                 type="text"
               />
             </Flex>
-
             <Flex gap={4} flexDirection={["column", "row"]}>
-              <AppFormInput id="town" label="Town" name="town" type="text" />
-
-              <AppFormInput
-                id="county"
-                label="County"
-                name="county"
-                type="text"
-              />
-
-              <AppFormInput
-                id="postcode"
-                label="Postcode"
-                name="postcode"
-                type="text"
-              />
+              <AppFormInput label="Town" name="town" type="text" />
+              <AppFormInput label="County" name="county" type="text" />
+              <AppFormInput label="Postcode" name="postcode" type="text" />
             </Flex>
-
             <HStack mt={4} gap={[0, 4]} flex={1}>
               <Button flex={1} variant={"orange"} onClick={onClose}>
                 Cancel
