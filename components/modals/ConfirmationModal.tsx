@@ -30,6 +30,10 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   );
   const color = useColorModeValue("white", "gray.800");
 
+  React.useEffect(() => {
+    console.log("ConfirmationModal isOpen", isOpen);
+  }, [isOpen]);
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />

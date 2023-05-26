@@ -5,6 +5,14 @@ export interface ErrorObject {
   request?: any;
 }
 
+export interface FormModalProps {
+  createOnSubmitHandler: (
+    apiFunction: (values: any) => Promise<any>,
+    successMessage: string,
+    errorMessage: string
+  ) => (values: any, actions: any) => Promise<void>;
+}
+
 export type DepartmentListItem = {
     id: number;
     departmentName: string;

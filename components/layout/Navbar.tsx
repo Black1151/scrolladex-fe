@@ -23,18 +23,25 @@ import AddDepartmentModal from "../modals/AddDepartmentModal";
 import { getDepartmentsAPI } from "@/api/departmentAPI";
 import { DepartmentListItem } from "@/types";
 import { motion } from "framer-motion";
+import ConfirmationModal from "../modals/ConfirmationModal";
 
 const Navbar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [departmentList, setDepartmentList] = useState<DepartmentListItem[]>(
     []
   );
+  const [confirmationMessage, setConfirmationMessage] = useState("");
+  const [confirmationStatus, setConfirmationStatus] = useState<
+    "success" | "error"
+  >("success");
+  const [isConfirmationOpen, setConfirmationOpen] = useState(false);
 
   const toast = useToast();
 
   const MotionBox = motion(Box);
 
-  const createDepartmentDropdownList = async () => {
+  const createDepartmentDropdownList = async (): Promise<void> => {
+    console.log("createDepartmentDropdownList started");
     try {
       const departments = await getDepartmentsAPI();
       if (departments != null) {
@@ -44,6 +51,7 @@ const Navbar = () => {
         }));
         setDepartmentList(newDepartmentsArray);
       }
+      console.log("createDepartmentDropdownList try finished");
     } catch (error: any) {
       toast({
         title: "An error occurred.",
@@ -55,8 +63,41 @@ const Navbar = () => {
     }
   };
 
-  const handleDepartmentAdded = () => {
-    createDepartmentDropdownList();
+  const createOnSubmitHandler =
+    (
+      apiFunction: (values: any) => Promise<any>,
+      successMessage: string,
+      errorMessage: string
+    ) =>
+    async (values: any, actions: any) => {
+      try {
+        await apiFunction(values);
+        createDepartmentDropdownList();
+        showConfirmationModal("success", successMessage);
+        actions.setSubmitting(false);
+      } catch (error) {
+        console.error(error);
+        if (error instanceof Error) {
+          showConfirmationModal(
+            "error",
+            error.message || "An unexpected error occurred."
+          );
+        } else {
+          showConfirmationModal("error", errorMessage);
+        }
+      } finally {
+        actions.setSubmitting(false);
+      }
+    };
+
+  const showConfirmationModal = (
+    status: "success" | "error",
+    message: string
+  ) => {
+    console.log("showConfirmationModal");
+    setConfirmationStatus(status);
+    setConfirmationMessage(message);
+    setConfirmationOpen(true);
   };
 
   useEffect(() => {
@@ -64,55 +105,69 @@ const Navbar = () => {
   }, []);
 
   return (
-    <MotionBox
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5, delay: 0.2 }}
-    >
-      <Flex
-        as="nav"
-        align="center"
-        justify="space-between"
-        padding="1rem"
-        bg="pictonBlue"
-        color="white"
-        px={[2, null, 8, null, 24]}
+    <>
+      <MotionBox
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <VStack alignItems="flex-start">
-          <Text fontSize={["xl", null, "2xl", "4xl"]} color="white">
-            Scroll-a-dex!
-          </Text>
-          <Text fontSize="xl" color="white" whiteSpace="nowrap">
-            Your complete personnel directory
-          </Text>
-        </VStack>
-        <Spacer />
-        <HStack display={{ base: "none", md: "flex" }}>
-          <AddEmployeeModal departmentList={departmentList} />
-          <AddDepartmentModal handleDepartmentAdded={handleDepartmentAdded} />
-        </HStack>
-        <Box display={{ base: "block", md: "none" }}>
-          <IconButton
-            aria-label="Open menu"
-            icon={<HamburgerIcon />}
-            onClick={onOpen}
-          />
-          <Drawer isOpen={isOpen} onClose={onClose} placement="right">
-            <DrawerOverlay />
-            <DrawerContent bg="blue">
-              <DrawerCloseButton />
-              <DrawerHeader>Menu</DrawerHeader>
-              <DrawerBody>
-                <AddEmployeeModal departmentList={departmentList} />
-                <AddDepartmentModal
-                  handleDepartmentAdded={handleDepartmentAdded}
-                />
-              </DrawerBody>
-            </DrawerContent>
-          </Drawer>
-        </Box>
-      </Flex>
-    </MotionBox>
+        <Flex
+          as="nav"
+          align="center"
+          justify="space-between"
+          padding="1rem"
+          bg="pictonBlue"
+          color="white"
+          px={[2, null, 8, null, 24]}
+        >
+          <VStack alignItems="flex-start">
+            <Text fontSize={["xl", null, "2xl", "4xl"]} color="white">
+              Scroll-a-dex!
+            </Text>
+            <Text fontSize="xl" color="white" whiteSpace="nowrap">
+              Your complete personnel directory
+            </Text>
+          </VStack>
+          <Spacer />
+          <HStack display={{ base: "none", md: "flex" }}>
+            <AddEmployeeModal
+              departmentList={departmentList}
+              createOnSubmitHandler={createOnSubmitHandler}
+            />
+            <AddDepartmentModal createOnSubmitHandler={createOnSubmitHandler} />
+          </HStack>
+          <Box display={{ base: "block", md: "none" }}>
+            <IconButton
+              aria-label="Open menu"
+              icon={<HamburgerIcon />}
+              onClick={onOpen}
+            />
+            <Drawer isOpen={isOpen} onClose={onClose} placement="right">
+              <DrawerOverlay />
+              <DrawerContent bg="blue">
+                <DrawerCloseButton />
+                <DrawerHeader>Menu</DrawerHeader>
+                <DrawerBody>
+                  <AddEmployeeModal
+                    departmentList={departmentList}
+                    createOnSubmitHandler={createOnSubmitHandler}
+                  />
+                  <AddDepartmentModal
+                    createOnSubmitHandler={createOnSubmitHandler}
+                  />
+                </DrawerBody>
+              </DrawerContent>
+            </Drawer>
+          </Box>
+        </Flex>
+      </MotionBox>
+      <ConfirmationModal
+        isOpen={isConfirmationOpen}
+        onClose={() => setConfirmationOpen(false)}
+        status={confirmationStatus}
+        bodyText={confirmationMessage}
+      />
+    </>
   );
 };
 
