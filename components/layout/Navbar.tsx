@@ -15,6 +15,7 @@ import {
   VStack,
   HStack,
   useToast,
+  Button,
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 
@@ -24,6 +25,9 @@ import { getDepartmentsAPI } from "@/api/departmentAPI";
 import { DepartmentListItem } from "@/types";
 import { motion } from "framer-motion";
 import ConfirmationModal from "../modals/ConfirmationModal";
+import { logoutUserAPI } from "@/api/authAPI";
+import { useRouter } from "next/router";
+import { useAuth } from "@/providers/AuthProvider";
 
 const Navbar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -36,9 +40,13 @@ const Navbar = () => {
   >("success");
   const [isConfirmationOpen, setConfirmationOpen] = useState(false);
 
+  const { authenticated, setAuthenticated } = useAuth();
+
   const toast = useToast();
 
   const MotionBox = motion(Box);
+
+  const router = useRouter();
 
   const createDepartmentDropdownList = async (): Promise<void> => {
     console.log("createDepartmentDropdownList started");
@@ -129,13 +137,28 @@ const Navbar = () => {
             </Text>
           </VStack>
           <Spacer />
-          <HStack display={{ base: "none", md: "flex" }}>
-            <AddEmployeeModal
-              departmentList={departmentList}
-              createOnSubmitHandler={createOnSubmitHandler}
-            />
-            <AddDepartmentModal createOnSubmitHandler={createOnSubmitHandler} />
-          </HStack>
+
+          {authenticated && (
+            <HStack display={{ base: "none", md: "flex" }}>
+              <AddEmployeeModal
+                departmentList={departmentList}
+                createOnSubmitHandler={createOnSubmitHandler}
+              />
+              <AddDepartmentModal
+                createOnSubmitHandler={createOnSubmitHandler}
+              />
+              <Button
+                onClick={() => {
+                  logoutUserAPI();
+                  setAuthenticated(false);
+                  router.replace("/login");
+                }}
+                variant="orange"
+              >
+                Logout
+              </Button>
+            </HStack>
+          )}
           <Box display={{ base: "block", md: "none" }}>
             <IconButton
               aria-label="Open menu"
