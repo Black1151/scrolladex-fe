@@ -115,7 +115,7 @@ const Index = () => {
                   <Image
                     borderRadius="full"
                     boxSize="100px"
-                    src={`${process.env.NEXT_PUBLIC_SERVER_ADDRESS!}${
+                    src={`${process.env.NEXT_PUBLIC_SERVER_ADDRESS!}/public${
                       employee.profilePictureUrl || "/placeholder.png"
                     }`}
                     alt={employee.firstName + " " + employee.lastName}
