@@ -1,5 +1,5 @@
 import React from "react";
-import { useFormik } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import {
   FormControl,
@@ -11,10 +11,8 @@ import {
   HStack,
 } from "@chakra-ui/react";
 import AppFormInput from "../forms/AppFormInput";
-
 import DragAndDropFileInput from "../forms/DragAndDropFileInput";
 import { createEmployeeAPI } from "@/api/employeeApi";
-
 import { DepartmentListItem } from "@/types";
 import ModalWrapper from "./ModalWrapper";
 import { FormModalProps } from "@/types";
@@ -43,106 +41,103 @@ const AddEmployeeModal: React.FC<Props> = ({
   createOnSubmitHandler,
   departmentList,
 }) => {
-  const { onClose: onModalClose } = useDisclosure();
-
-  const formik = useFormik({
-    initialValues: {
-      title: "",
-      firstName: "",
-      lastName: "",
-      empNo: "",
-      jobTitle: "",
-      departmentId: "",
-      telephone: "",
-      email: "",
-      profilePicture: null,
-    },
-    validationSchema,
-    onSubmit: createOnSubmitHandler(
-      createEmployeeAPI,
-      "Employee was added successfully",
-      "An error occurred while adding the employee."
-    ),
-  });
-
-  const onClose = () => {
-    formik.resetForm();
-    onModalClose();
-  };
+  const { onClose } = useDisclosure();
 
   return (
-    <>
-      <ModalWrapper buttonText="Add Employee" title="Add Employee">
-        <form onSubmit={formik.handleSubmit}>
-          <Flex gap={4} flexDirection="column">
-            <Flex flexDirection={["column", null, "row"]} gap={4}>
-              <AppFormInput
-                type="select"
-                name="title"
-                label="Title"
-                options={[
-                  { value: "", label: "Select" },
-                  { value: "Mr.", label: "Mr." },
-                  { value: "Mrs.", label: "Mrs." },
-                  { value: "Miss", label: "Miss" },
-                  { value: "Ms.", label: "Ms." },
-                  { value: "Dr.", label: "Dr." },
-                ]}
-              />
-
-              <AppFormInput type="text" name="firstName" label="First Name" />
-              <AppFormInput type="text" name="lastName" label="Last Name" />
-              <AppFormInput type="text" name="empNo" label="Employee Number" />
-            </Flex>
-            <Flex flexDirection={["column", null, "row"]} gap={4}>
-              <AppFormInput type="text" name="jobTitle" label="Job Title" />
-
-              <AppFormInput
-                type="select"
-                name="departmentId"
-                label="Department"
-                options={departmentList.map((department) => ({
-                  value: department.id,
-                  label: department.departmentName,
-                }))}
-              />
-            </Flex>
-            <Flex flexDirection={["column", null, "row"]} gap={4}>
-              <AppFormInput type="text" name="telephone" label="Telephone" />
-              <AppFormInput type="email" name="email" label="Email" />
-            </Flex>
-            <FormControl
-              isInvalid={
-                formik.touched.profilePicture && !!formik.errors.profilePicture
-              }
-            >
-              <FormLabel htmlFor="profilePicture">Profile Picture</FormLabel>
-              <DragAndDropFileInput
-                onFile={(file) => {
-                  formik.setFieldValue("profilePicture", file);
-                }}
-              />
-              <FormErrorMessage>
-                {formik.errors.profilePicture}
-              </FormErrorMessage>
-            </FormControl>
-            <HStack mt={4} gap={[0, 4]} flex={1}>
-              <Button flex={1} variant={"orange"} onClick={onClose}>
-                Cancel
-              </Button>
-              <Button
-                variant={"green"}
-                type="submit"
-                isLoading={formik.isSubmitting}
-                flex={1}
+    <ModalWrapper buttonText="Add Employee" title="Add Employee">
+      <Formik
+        initialValues={{
+          title: "",
+          firstName: "",
+          lastName: "",
+          empNo: "",
+          jobTitle: "",
+          departmentId: "",
+          telephone: "",
+          email: "",
+          profilePicture: null,
+        }}
+        validationSchema={validationSchema}
+        onSubmit={createOnSubmitHandler(
+          createEmployeeAPI,
+          "Employee was added successfully",
+          "An error occurred while adding the employee."
+        )}
+      >
+        {(formik) => (
+          <Form onSubmit={formik.handleSubmit}>
+            <Flex p={4} gap={4} flexDirection="column">
+              <Flex flexDirection={["column", null, "row"]} gap={4}>
+                <AppFormInput
+                  type="select"
+                  name="title"
+                  label="Title"
+                  options={[
+                    { value: "Mr.", label: "Mr." },
+                    { value: "Mrs.", label: "Mrs." },
+                    { value: "Miss", label: "Miss" },
+                    { value: "Ms.", label: "Ms." },
+                    { value: "Dr.", label: "Dr." },
+                  ]}
+                />
+                <AppFormInput type="text" name="firstName" label="First Name" />
+                <AppFormInput type="text" name="lastName" label="Last Name" />
+                <AppFormInput
+                  type="text"
+                  name="empNo"
+                  label="Employee Number"
+                />
+              </Flex>
+              <Flex flexDirection={["column", null, "row"]} gap={4}>
+                <AppFormInput type="text" name="jobTitle" label="Job Title" />
+                <AppFormInput
+                  type="select"
+                  name="departmentId"
+                  label="Department"
+                  options={departmentList.map((department) => ({
+                    value: department.id,
+                    label: department.departmentName,
+                  }))}
+                />
+              </Flex>
+              <Flex flexDirection={["column", null, "row"]} gap={4}>
+                <AppFormInput type="text" name="telephone" label="Telephone" />
+                <AppFormInput type="email" name="email" label="Email" />
+              </Flex>
+              <FormControl
+                isInvalid={
+                  formik.touched.profilePicture &&
+                  !!formik.errors.profilePicture
+                }
               >
-                Submit
-              </Button>
-            </HStack>
-          </Flex>
-        </form>
-      </ModalWrapper>
-    </>
+                <FormLabel htmlFor="profilePicture">Profile Picture</FormLabel>
+                <DragAndDropFileInput
+                  onFile={(file) => {
+                    formik.setFieldValue("profilePicture", file);
+                  }}
+                />
+                <FormErrorMessage>
+                  {formik.errors.profilePicture}
+                </FormErrorMessage>
+              </FormControl>
+              <HStack mt={4} gap={[0, 4]} flex={1}>
+                <Button flex={1} variant={"orange"} onClick={onClose}>
+                  Cancel
+                </Button>
+                <Button
+                  variant={"green"}
+                  type="submit"
+                  isLoading={formik.isSubmitting}
+                  flex={1}
+                >
+                  Submit
+                </Button>
+              </HStack>
+            </Flex>
+          </Form>
+        )}
+      </Formik>
+    </ModalWrapper>
   );
 };
 

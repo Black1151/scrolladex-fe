@@ -1,5 +1,5 @@
 import React from "react";
-import { useFormik } from "formik";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { Button, useDisclosure, Flex, HStack } from "@chakra-ui/react";
 import { createDepartmentAPI } from "@/api/departmentAPI";
@@ -21,72 +21,71 @@ const AddDepartmentModal: React.FC<FormModalProps> = ({
 }) => {
   const { onClose: onModalClose } = useDisclosure();
 
-  const formik = useFormik({
-    initialValues: {
-      departmentName: "",
-      addressLineOne: "",
-      addressLineTwo: "",
-      town: "",
-      county: "",
-      postcode: "",
-    },
-    validationSchema,
-    onSubmit: createOnSubmitHandler(
-      createDepartmentAPI,
-      "Department was added successfully",
-      "An error occurred while adding the department."
-    ),
-  });
-
   const onClose = () => {
-    formik.resetForm();
     onModalClose();
   };
 
   return (
-    <>
-      <ModalWrapper buttonText="Add Department" title="Add Department">
-        <form onSubmit={formik.handleSubmit}>
-          <Flex p={4} gap={4} flexDirection="column">
-            <AppFormInput
-              label="Department Name"
-              name="departmentName"
-              type="text"
-            />
-            <Flex gap={4} flexDirection={["column", "row"]}>
+    <ModalWrapper buttonText="Add Department" title="Add Department">
+      <Formik
+        initialValues={{
+          departmentName: "",
+          addressLineOne: "",
+          addressLineTwo: "",
+          town: "",
+          county: "",
+          postcode: "",
+        }}
+        validationSchema={validationSchema}
+        onSubmit={createOnSubmitHandler(
+          createDepartmentAPI,
+          "Department was added successfully",
+          "An error occurred while adding the department."
+        )}
+      >
+        {(formik) => (
+          <Form onSubmit={formik.handleSubmit}>
+            <Flex p={4} gap={4} flexDirection="column">
               <AppFormInput
-                label="Address Line 1"
-                name="addressLineOne"
+                label="Department Name"
+                name="departmentName"
                 type="text"
               />
-              <AppFormInput
-                label="Address Line 2"
-                name="addressLineTwo"
-                type="text"
-              />
+              <Flex gap={4} flexDirection={["column", "row"]}>
+                <AppFormInput
+                  label="Address Line 1"
+                  name="addressLineOne"
+                  type="text"
+                />
+                <AppFormInput
+                  label="Address Line 2"
+                  name="addressLineTwo"
+                  type="text"
+                />
+              </Flex>
+              <Flex gap={4} flexDirection={["column", "row"]}>
+                <AppFormInput label="Town" name="town" type="text" />
+                <AppFormInput label="County" name="county" type="text" />
+                <AppFormInput label="Postcode" name="postcode" type="text" />
+              </Flex>
+              <HStack mt={4} gap={[0, 4]} flex={1}>
+                <Button flex={1} variant={"orange"} onClick={onClose}>
+                  Cancel
+                </Button>
+                <Button
+                  variant={"green"}
+                  type="submit"
+                  isLoading={formik.isSubmitting}
+                  flex={1}
+                >
+                  Submit
+                </Button>
+              </HStack>
             </Flex>
-            <Flex gap={4} flexDirection={["column", "row"]}>
-              <AppFormInput label="Town" name="town" type="text" />
-              <AppFormInput label="County" name="county" type="text" />
-              <AppFormInput label="Postcode" name="postcode" type="text" />
-            </Flex>
-            <HStack mt={4} gap={[0, 4]} flex={1}>
-              <Button flex={1} variant={"orange"} onClick={onClose}>
-                Cancel
-              </Button>
-              <Button
-                variant={"green"}
-                type="submit"
-                isLoading={formik.isSubmitting}
-                flex={1}
-              >
-                Submit
-              </Button>
-            </HStack>
-          </Flex>
-        </form>
-      </ModalWrapper>
-    </>
+          </Form>
+        )}
+      </Formik>
+    </ModalWrapper>
   );
 };
 
