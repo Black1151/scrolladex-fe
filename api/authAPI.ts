@@ -7,6 +7,10 @@ interface User {
   password: string;
 }
 
+interface AuthenticatedResponse {
+  authenticated: boolean;
+}
+
 export const registerUserAPI = async (data: User): Promise<number | null> => {
   try {
     const response: AxiosResponse<User> = await apiClient.post('/register', data);
@@ -47,13 +51,15 @@ export const getProfileAPI = async (): Promise<User | null> => {
   }
 };
 
-export const checkSessionAPI = async (): Promise<User | null> => {
+export const checkSessionAPI = async (): Promise<AuthenticatedResponse> => {
   try {
-    const response: AxiosResponse<User> = await apiClient.get('/api/check-session');
+    const response: AxiosResponse<AuthenticatedResponse> = await apiClient.get('/check-session', { withCredentials: true });
     return response.data;
   } catch (error) {
     console.error('Error checking session', error);
     throw error;
   }
 };
+
+
 
