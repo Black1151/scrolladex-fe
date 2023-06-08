@@ -3,29 +3,38 @@ import { useRouter } from "next/router";
 import { checkSessionAPI } from "@/api/authAPI";
 
 interface AuthContextData {
-  user: any | null;
+  authenticated: boolean;
   isLoading: boolean;
+  setAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const AuthContext = createContext<AuthContextData>({
-  user: null,
+export const AuthContext = createContext<AuthContextData>({
+  authenticated: false,
   isLoading: true,
+  setAuthenticated: () => {},
 });
+
+export const useAuth = () => {
+  return useContext(AuthContext);
+};
 
 interface AuthProviderProps {
   children: React.ReactNode;
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<any | null>(null);
+  const [authenticated, setAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const user = await checkSessionAPI();
-        setUser(user);
+        const authResponse = await checkSessionAPI();
+        setAuthenticated(authResponse.authenticated);
+        if (!authResponse.authenticated) {
+          router.replace("/login");
+        }
       } catch (error) {
         console.error("Session check failed", error);
         router.replace("/login");
@@ -38,12 +47,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, isLoading }}>
+    <AuthContext.Provider
+      value={{ authenticated, isLoading, setAuthenticated }}
+    >
       {children}
     </AuthContext.Provider>
   );
-};
-
-export const useAuth = () => {
-  return useContext(AuthContext);
 };
